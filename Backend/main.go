@@ -21,3 +21,10 @@ func getSystemMetrics(w http.ResponseWriter, r *http.Request) {
 }
 
 // Memory Usage
+memStats, err := mem.VirtualMemory()
+if err != nil{
+	http.Error(w, fmt.Sprintf("Unable to fetch memory data %v", err), http.StatusInternalServerError)
+	return
+}
+
+// Disk Usage
