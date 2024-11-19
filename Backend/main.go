@@ -41,4 +41,22 @@ func getSystemMetrics(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-   
+    // Send JSON response
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(http.StatusOK)
+    fmt.Fprintf(w, `{
+        "cpu_usage": %v,
+        "memory_usage": %v,
+        "disk_usage": %v,
+        "network_usage": %v
+    }`, cpuPercent, memStats.UsedPercent, diskStats.UsedPercent, netStats[0].BytesSent)
+}
+
+func main() {
+    r := mux.NewRouter()
+    r.HandleFunc("/api/stats", getSystemMetrics).Methods("GET")
+
+    // Enable CORS
+    handler := cors.Default().Handler(r)
+    log.Fatal(http.ListenAndServe(":8080", handler))
+}
