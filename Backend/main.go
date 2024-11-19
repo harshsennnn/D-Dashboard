@@ -34,4 +34,11 @@ func getSystemMetrics(w http.ResponseWriter, r *http.Request) {
         return
     }
 
- 
+    // Get Network stats
+    netStats, err := net.IOCounters(false)
+    if err != nil {
+        http.Error(w, fmt.Sprintf("Unable to fetch network status: %v", err), http.StatusInternalServerError)
+        return
+    }
+
+   
