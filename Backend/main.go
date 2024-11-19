@@ -1,4 +1,5 @@
 package main
+
 import (
     "fmt"
     "log"
@@ -12,19 +13,25 @@ import (
 )
 
 func getSystemMetrics(w http.ResponseWriter, r *http.Request) {
-	/*For CPU Usage*/
-	cpuPercent, err := cpu.Percent(0, false)
-	if err != nil {
-		http.Error(w, fmt.Sprintf("Unable to fetch CPU data: %v", err), http.StatusInternalServerError)
-		return
-	}
-}
+    // Get CPU usage
+    cpuPercent, err := cpu.Percent(0, false)
+    if err != nil {
+        http.Error(w, fmt.Sprintf("Unable to fetch CPU data: %v", err), http.StatusInternalServerError)
+        return
+    }
 
-// Memory Usage
-memStats, err := mem.VirtualMemory()
-if err != nil{
-	http.Error(w, fmt.Sprintf("Unable to fetch memory data %v", err), http.StatusInternalServerError)
-	return
-}
+    // Get Memory usage
+    memStats, err := mem.VirtualMemory()
+    if err != nil {
+        http.Error(w, fmt.Sprintf("Unable to fetch memory data: %v", err), http.StatusInternalServerError)
+        return
+    }
 
-// Disk Usage
+    // Get Disk usage
+    diskStats, err := disk.Usage("/")
+    if err != nil {
+        http.Error(w, fmt.Sprintf("Unable to fetch disk usage: %v", err), http.StatusInternalServerError)
+        return
+    }
+
+ 
